@@ -1,0 +1,20 @@
+# This is the official list of the AUTHORS of skin editor
+# for copyright purposes.
+
+# Names should be added to this file as
+#	Name or Organization <email address>
+# The email address is not required for organizations.
+Yanick Bourbeau <ybourbeau@mrgtech.ca>
+
+
+###############################
+
+This project also reuse components made by others:
+
+- A modified version of com.badlogic.gdx.scenes.scene2d.ui.Skin from libGDX.
+- A modified version of com.badlogic.gdx.tools.hiero.BMFontUtil from libGDX.
+- A modified version of com.badlogic.gdx.tools.hiero.unicodefont.GlyphPage from libGDX.
+- com.mobidevelop.maps.editor.ui.utils.Tooltips from Justin Shapcott
+
+
+
