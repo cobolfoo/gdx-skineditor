@@ -371,7 +371,16 @@ public class OptionsPane extends Table {
 
 				// field name
 
-				tableFields.add(field.getName()).left();
+				// White required
+				// Grey optional
+				if (game.opt.isFieldOptional(currentStyle.getClass(), field.getName())) {
+
+					tableFields.add(new Label(field.getName(),game.skin,"optional")).left();
+					
+				} else {
+					tableFields.add(new Label(field.getName(), game.skin, "default")).left();
+					
+				}
 
 				Actor actor;
 

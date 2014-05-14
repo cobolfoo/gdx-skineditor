@@ -52,8 +52,13 @@ public class SkinEditorGame extends Game {
 	// System fonts
 	public SystemFonts fm;
 	
+	// Optional check
+	public OptionalChecker opt;
+	
 	@Override
 	public void create() {
+		
+		opt = new OptionalChecker();
 		
 		fm = new SystemFonts();
 		fm.refreshFonts();

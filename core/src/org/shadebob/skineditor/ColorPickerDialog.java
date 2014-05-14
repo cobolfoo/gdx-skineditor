@@ -50,7 +50,6 @@ import com.badlogic.gdx.utils.reflect.Field;
  */
 public class ColorPickerDialog extends Dialog {
 
-	private Stage stage;
 	private SkinEditorGame game;
 	private Table tableColors;
 	ObjectMap<String, Color> colors;
@@ -89,13 +88,13 @@ public class ColorPickerDialog extends Dialog {
 					if ((colorName != null) && (colorName.isEmpty() == false)) {
 						// Verify if the color name is already in use
 						if (colors.containsKey(colorName) == true) {
-							game.showNotice("Error", "Color name already in use!", stage);
+							game.showNotice("Error", "Color name already in use!", game.screenMain.stage);
 						} else {
 							// Add the color (asuming RGBA)
 							float[] components = color.getComponents(null);
 							Color newColor = new Color(components[0], components[1], components[2], components[3]);
 							if (isColorInUse(newColor)) {
-								game.showNotice("Error","Same color value (" + newColor.toString() + ") is already defined with a different name!", stage);
+								game.showNotice("Error","Same color value (" + newColor.toString() + ") is already defined with a different name!", game.screenMain.stage);
 								return;
 							}
 								
@@ -216,7 +215,7 @@ public class ColorPickerDialog extends Dialog {
 
 							if (isColorInUse(color) == true) {
 
-								game.showNotice("Error", "Color already in use!", stage);
+								game.showNotice("Error", "Color already in use!", game.screenMain.stage);
 
 							} else {
 
@@ -236,7 +235,7 @@ public class ColorPickerDialog extends Dialog {
 					dlg.button("Cancel", false);
 					dlg.key(com.badlogic.gdx.Input.Keys.ENTER, true);
 					dlg.key(com.badlogic.gdx.Input.Keys.ESCAPE, false);
-					dlg.show(stage);
+					dlg.show(game.screenMain.stage);
 					
 
 				}

@@ -16,6 +16,8 @@
 package org.shadebob.skineditor;
 
 import java.util.Iterator;
+
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -158,7 +160,13 @@ public class FontPickerDialog extends Dialog {
 								game.showNotice("Error", "Bitmap font already in use!", getStage());
 
 							} else {
-
+								
+								// Remove files from disk (fnt and png)
+								FileHandle targetFont = new FileHandle("projects/" + game.screenMain.getcurrentProject() + "/" +key + ".fnt");
+								FileHandle targetImage = new FileHandle("projects/" + game.screenMain.getcurrentProject() + "/assets/" + key + ".png");
+								targetFont.delete();
+								targetImage.delete();
+								
 								fonts.remove(key);
 								// update table
 								updateTable();

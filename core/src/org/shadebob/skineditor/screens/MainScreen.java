@@ -11,6 +11,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
@@ -21,6 +23,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class MainScreen implements Screen {
 
@@ -39,15 +42,16 @@ public class MainScreen implements Screen {
 		barWidgets = new WidgetsBar(game);
 		panePreview = new PreviewPane(game);
 		paneOptions = new OptionsPane(game);
-		stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+		stage = new Stage(new ScreenViewport());
 		
 		Table table = new Table();
 		table.setFillParent(true);
 		
 		table.top().left().add(barMenu).expandX().fillX().colspan(2).row();
 		table.top().left().add(barWidgets).expandX().fillX().colspan(2).row();
-		table.add(paneOptions).width(420).fill().expandY();
-		table.add(new ScrollPane(panePreview)).fill().expand();
+		table.top().left().add(paneOptions).width(420).left().fill().expandY();
+		ScrollPane scrollPane = new ScrollPane(panePreview);
+		table.add(scrollPane).fill().expand();
 		stage.addActor(table);
 		barWidgets.initializeButtons();
 		
@@ -62,8 +66,6 @@ public class MainScreen implements Screen {
 
 		stage.act(delta);
 		stage.draw();	
-		
-//		Table.drawDebug(stage);
 		
 	}
 	
@@ -102,12 +104,13 @@ public class MainScreen implements Screen {
 		
 		barMenu.update(currentProject);
 		
-		Gdx.input.setInputProcessor(stage);
-		
 		panePreview.refresh();
 		paneOptions.refresh();
 		
 		barWidgets.resetButtonSelection();
+
+		Gdx.input.setInputProcessor(stage);
+		
 	}
 	
 

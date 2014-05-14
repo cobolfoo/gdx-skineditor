@@ -3,7 +3,8 @@
     com.badlogic.gdx.graphics.Color: {
 	    green: { a: 1, b: 0, g: 1, r: 0 },
 	    white: { a: 1, b: 1, g: 1, r: 1 },
-        grey: { a: 1, b: 0.8, g: 0.8, r: 0.8 },
+        light_grey: { a: 1, b: 0.8, g: 0.8, r: 0.8 },
+        grey: { a: 1, b: 0.7, g: 0.7, r: 0.7 },
 	    red: { a: 1, b: 0, g: 0, r: 1 },
 	    black: { a: 1, b: 0, g: 0, r: 0 }
     },
@@ -15,7 +16,7 @@
 	    toggle: { down: default-round-down, checked: default-round-down, up: default-round }
     },
     com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
-	    default: { down: default-round-down, up: default-round, font: default-font, fontColor: white, disabledFontColor: grey },
+	    default: { down: default-round-down, up: default-round, font: default-font, fontColor: white, disabledFontColor: light_grey },
 	    toggle: { down: default-round-down, up: default-round, checked: default-round-down, font: default-font, fontColor: white, downFontColor: red }
     },
     com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
@@ -34,7 +35,8 @@
     },
     com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	    default: { font: default-font, fontColor: white },
-	    title: { font: default-font, fontColor: grey },
+	    optional: { font: default-font, fontColor: grey },
+	    title: { font: default-font, fontColor: light_grey },
 	    error: { font: default-font, fontColor: red }
     },
     com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {

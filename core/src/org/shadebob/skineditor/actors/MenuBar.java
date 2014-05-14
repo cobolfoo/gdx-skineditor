@@ -15,12 +15,21 @@
  ******************************************************************************/
 package org.shadebob.skineditor.actors;
 
+import java.io.File;
+
+import javax.swing.JFileChooser;
+
 import org.shadebob.skineditor.SkinEditorGame;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 
@@ -51,9 +60,6 @@ public class MenuBar extends Table {
 		TextButton buttonRefresh = new TextButton("Refresh Resources", game.skin);
 		add(buttonRefresh).pad(5);
 		
-		TextButton buttonClose = new TextButton("Close Project", game.skin);
-		add(buttonClose).pad(5).expandX().left();
-
 		buttonRefresh.addListener(new ChangeListener() {
 
 			@Override
@@ -65,7 +71,24 @@ public class MenuBar extends Table {
 			
 		});
 		
+		TextButton buttonExport = new TextButton("Export to Directory", game.skin);
+		add(buttonExport).pad(5);
+		
+		buttonExport.addListener(new ChangeListener() {
 
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				
+				showExportDialog();
+				
+			}
+			
+		});
+		
+
+		
+		TextButton buttonClose = new TextButton("Close Project", game.skin);
+		add(buttonClose).pad(5).expandX().left();
 		
 		buttonClose.addListener(new ChangeListener() {
 
@@ -88,6 +111,93 @@ public class MenuBar extends Table {
 	}
 	
 	
+	/*
+	 * Show export dialog
+	 */
+	protected void showExportDialog() {
+		
+		final Preferences prefs = Gdx.app.getPreferences("skin_editor_project_" + game.screenMain.getcurrentProject());
+		final TextField textDirectory = new TextField(prefs.getString("export_to_directory"),game.skin);
+		
+		Dialog dlg = new Dialog("Export to Directory", game.skin) {
+
+			@Override
+			protected void result(Object object) {
+				
+				if ((Boolean) object == true) {
+					
+					if (textDirectory.getText().isEmpty() == true) {
+						game.showNotice("Warning", "Directory field is empty!", game.screenMain.stage);
+						return;
+					}
+					
+					
+					FileHandle targetDirectory = new FileHandle(textDirectory.getText());
+					if (targetDirectory.exists() == false) {
+						game.showNotice("Warning", "Directory not found!", game.screenMain.stage);
+						return;						
+					}
+					
+					// Copy uiskin.* and *.fnt 
+					
+					FileHandle projectFolder = Gdx.files.local("projects").child(game.screenMain.getcurrentProject());
+					for(FileHandle file : projectFolder.list()) {
+						if (file.name().startsWith("uiskin.") || (file.extension() == "fnt")) {
+							Gdx.app.log("MenuBar","Copying file: " + file.name() + " ...");
+							FileHandle target = targetDirectory.child(file.name());
+							file.copyTo(target);
+						}
+					}
+					game.showNotice("Operation Completed", "Project successfully exported!", game.screenMain.stage);
+				}
+				
+			}
+
+		};
+
+		dlg.pad(20);
+		
+		Table table = dlg.getContentTable();
+		table.padTop(20);
+		table.add("Directory:");
+		table.add(textDirectory).width(320);
+		
+		TextButton buttonChoose = new TextButton("...", game.skin);
+		buttonChoose.addListener(new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				
+				JFileChooser chooser = new JFileChooser();
+				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				int ret = chooser.showOpenDialog(null);
+				if (ret == JFileChooser.APPROVE_OPTION) {
+					File f = chooser.getSelectedFile();
+					textDirectory.setText(f.getAbsolutePath());
+					
+					// Store to file
+					prefs.putString("export_to_directory", f.getAbsolutePath());
+					prefs.flush();
+				}
+				
+			}
+			
+		});
+		
+		table.add(buttonChoose);
+		
+		table.row();
+		table.padBottom(20);
+		
+		dlg.button("Export", true);
+		dlg.button("Cancel", false);
+		dlg.key(com.badlogic.gdx.Input.Keys.ENTER, true);
+		dlg.key(com.badlogic.gdx.Input.Keys.ESCAPE, false);
+		dlg.show(getStage());
+		
+	}
+
+
 	/**
 	 * Update project name field 
 	 */

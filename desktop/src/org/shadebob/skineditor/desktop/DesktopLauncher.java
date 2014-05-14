@@ -17,6 +17,9 @@ package org.shadebob.skineditor.desktop;
 
 import java.io.File;
 
+import javax.swing.LookAndFeel;
+import javax.swing.UIManager;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
@@ -36,12 +39,20 @@ public class DesktopLauncher {
 	 */
 	public static void main (String[] arg) {
 		
+		// Set look and feel for Swing dialogs
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = 1024;
 		config.height = 768;
-		config.resizable = false;
-		config.title = "Skin Editor for libGDX (v0.1)";
+		config.resizable = true;
+		config.title = "Skin Editor for libGDX (v0.2)";
 
+		
 		new LwjglApplication(new SkinEditorGame(), config);
 	}
 }

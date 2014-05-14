@@ -19,6 +19,9 @@ import org.shadebob.skineditor.SkinEditorGame;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.model.Node;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -51,14 +54,23 @@ public class PreviewPane extends Table {
 
 	// private Table tab
 	private SkinEditorGame game;
-
+	// An input listener to use on items inside a scroll pane, thanks to Tomski for the hint.
+	private InputListener stopTouchDown = new InputListener() {
+		
+		@Override
+		public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+			event.stop();
+			return false;
+		}
+	};
+	
 	/**
 	 * 
 	 */
 	public PreviewPane(SkinEditorGame game) {
 
+		super(game.skin);
 		this.game = game;
-		setSkin(game.skin);
 		top();
 		left();
 
@@ -75,6 +87,8 @@ public class PreviewPane extends Table {
 		ImageButton button = (ImageButton) game.screenMain.barWidgets.group.getChecked();
 		String widget = button.getUserObject().toString();
 		String widgetStyle = "com.badlogic.gdx.scenes.scene2d.ui." + widget + "$" + widget + "Style";
+
+		
 
 		try {
 			Class<?> style = Class.forName(widgetStyle);
@@ -98,6 +112,7 @@ public class PreviewPane extends Table {
 					// We render one per key
 					add(new Label(key, game.skin, "title")).left().pad(10).expandX().row();
 
+					try {
 					if (widget.equals("Label")) {
 
 						Label w = new Label("This is a Label widget", game.skinProject, key);
@@ -111,6 +126,7 @@ public class PreviewPane extends Table {
 					} else if (widget.equals("TextButton")) { // TextButton
 
 						TextButton w = new TextButton("This is a TextButton widget", game.skinProject, key);
+						
 						add(w).pad(10).padBottom(20).row();
 
 					} else if (widget.equals("ImageButton")) { // ImageButton
@@ -121,16 +137,15 @@ public class PreviewPane extends Table {
 					} else if (widget.equals("CheckBox")) { // CheckBox
 
 						CheckBox w = new CheckBox("This is a CheckBox widget", game.skinProject, key);
-						w.setChecked(false);
+						w.setChecked(true);
 						add(w).pad(10).padBottom(20).row();
 
-						CheckBox w2 = new CheckBox("This is a CheckBox widget", game.skinProject, key);
-						w2.setChecked(true);
-						add(w2).pad(10).padBottom(20).row();
 
 					} else if (widget.equals("TextField")) { // TextField
 
 						TextField w = new TextField("This is a TextField widget", game.skinProject, key);
+						w.addListener(stopTouchDown);
+
 						add(w).pad(10).width(220).padBottom(20).row();
 
 					} else if (widget.equals("List")) { // List
@@ -158,15 +173,20 @@ public class PreviewPane extends Table {
 
 						ProgressBar w = new ProgressBar(0, 100, 5, false, game.skinProject, key);
 						w.setValue(50);
+						w.addListener(stopTouchDown);
+
 						add(w).pad(10).width(220).padBottom(20).expandX().fillX().row();
 
 					} else if (widget.equals("Slider")) { // Slider
 
 						Slider w = new Slider(0, 100, 5, false, game.skinProject, key);
 						add(w).pad(10).width(220).padBottom(20).expandX().fillX().row();
+						w.addListener(stopTouchDown);
 
 						Slider w2 = new Slider(0, 100, 5, true, game.skinProject, key);
 						add(w2).pad(10).padBottom(20).expandX().fillX().row();
+						w2.addListener(stopTouchDown);
+
 
 					} else if (widget.equals("ScrollPane")) { // ScrollPane
 
@@ -177,6 +197,7 @@ public class PreviewPane extends Table {
 							t.add("This is a ScrollPane Widget").row();
 						}
 						ScrollPane w = new ScrollPane(t, game.skinProject, key);
+						w.addListener(stopTouchDown);
 						w.setFlickScroll(true);
 						w.setScrollbarsOnTop(true);
 						w.setScrollBarPositions(true, true);
@@ -196,6 +217,7 @@ public class PreviewPane extends Table {
 							}
 
 							SplitPane w = new SplitPane(t, t2, (j % 2 == 0), game.skinProject, key);
+							w.addListener(stopTouchDown);
 							add(w).pad(10).width(220).height(160).padBottom(20).expandX().fillX();
 						}
 						row();
@@ -207,38 +229,39 @@ public class PreviewPane extends Table {
 							t.add("This is a Window Widget").row();
 						}
 						Window w = new Window("This is a Window Widget", game.skinProject);
+						w.addListener(stopTouchDown);
 						w.add(t);
 						add(w).pad(10).width(420).height(240).padBottom(20).expandX().fillX().row();
 
 					} else if (widget.equals("Touchpad")) { // Touchpad
 
 						Touchpad w = new Touchpad(0, game.skinProject, key);
+						w.addListener(stopTouchDown);
+
 						add(w).pad(10).width(200).height(200).padBottom(20).expandX().fillX().row();
 
 					} else if (widget.equals("Tree")) { // Tree
 
 						Tree w = new Tree(game.skinProject, key);
-						for (int i = 0; i < 3; i++) {
-							Tree.Node node = new Tree.Node(new Label("This", game.skin));
-							Tree.Node node1 = new Tree.Node(new Label("is", game.skin));
-							Tree.Node node2 = new Tree.Node(new Label("a", game.skin));
-							Tree.Node node3 = new Tree.Node(new Label("Tree", game.skin));
-							Tree.Node node4 = new Tree.Node(new Label("Widget", game.skin));
-							node3.add(node4);
-							node2.add(node3);
-							node1.add(node2);
-							;
-							node.add(node1);
-							w.add(node);
-						}
+						Tree.Node node = new Tree.Node(new Label("This", game.skin));
+						Tree.Node node1 = new Tree.Node(new Label("is", game.skin));
+						Tree.Node node2 = new Tree.Node(new Label("a", game.skin));
+						Tree.Node node3 = new Tree.Node(new Label("Tree", game.skin));
+						Tree.Node node4 = new Tree.Node(new Label("Widget", game.skin));
+						node3.add(node4);
+						node2.add(node3);
+						node1.add(node2);
+						node.add(node1);
+						w.add(node);
 
 						w.expandAll();
 						add(w).pad(10).width(200).height(200).padBottom(20).expandX().fillX().row();
-
 					} else {
 						add(new Label("Unknown widget type!", game.skin, "error")).pad(10).padBottom(20).row();
 					}
-
+					} catch(Exception e) {
+						add(new Label("Please fill all required fields", game.skin, "error")).pad(10).padBottom(20).row();
+					}
 				}
 
 			}
@@ -246,5 +269,6 @@ public class PreviewPane extends Table {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 }

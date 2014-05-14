@@ -1,6 +1,7 @@
 package org.shadebob.skineditor.screens;
 
 import org.shadebob.skineditor.SkinEditorGame;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class WelcomeScreen implements Screen {
 
@@ -27,7 +29,7 @@ public class WelcomeScreen implements Screen {
 
 	public WelcomeScreen(SkinEditorGame game) {
 		this.game = game;
-		stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+		stage = new Stage(new ScreenViewport());
 	}
 
 	@Override
