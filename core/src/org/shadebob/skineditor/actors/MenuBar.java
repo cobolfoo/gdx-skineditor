@@ -15,6 +15,7 @@
  ******************************************************************************/
 package org.shadebob.skineditor.actors;
 
+import java.awt.Frame;
 import java.io.File;
 
 import javax.swing.JFileChooser;
@@ -167,6 +168,17 @@ public class MenuBar extends Table {
 
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
+				
+				// Need to steal focus first with this hack (Thanks to Z-Man)
+				Frame frame = new Frame();
+				frame.setUndecorated(true);
+				frame.setOpacity(0);
+				frame.setLocationRelativeTo(null);
+				frame.setVisible(true);
+				frame.toFront();
+				frame.setVisible(false);
+				frame.dispose();
+				
 				
 				JFileChooser chooser = new JFileChooser();
 				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);

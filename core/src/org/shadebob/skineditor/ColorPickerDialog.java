@@ -15,6 +15,7 @@
  ******************************************************************************/
 package org.shadebob.skineditor;
 
+import java.awt.Frame;
 import java.util.Iterator;
 
 import javax.swing.JColorChooser;
@@ -79,6 +80,16 @@ public class ColorPickerDialog extends Dialog {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 
+				// Need to steal focus first with this hack (Thanks to Z-Man)
+				Frame frame = new Frame();
+				frame.setUndecorated(true);
+				frame.setOpacity(0);
+				frame.setLocationRelativeTo(null);
+				frame.setVisible(true);
+				frame.toFront();
+				frame.setVisible(false);
+				frame.dispose();
+				
 				// Call swing color picker
 				java.awt.Color color = JColorChooser.showDialog(null, "Pick your color", java.awt.Color.WHITE);
 				if (color != null) {
