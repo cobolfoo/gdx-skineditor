@@ -228,7 +228,7 @@ public class PreviewPane extends Table {
 						for (int i = 0; i < 5; i++) {
 							t.add("This is a Window Widget").row();
 						}
-						Window w = new Window("This is a Window Widget", game.skinProject);
+						Window w = new Window("This is a Window Widget", game.skinProject, key);
 						w.addListener(stopTouchDown);
 						w.add(t);
 						add(w).pad(10).width(420).height(240).padBottom(20).expandX().fillX().row();
