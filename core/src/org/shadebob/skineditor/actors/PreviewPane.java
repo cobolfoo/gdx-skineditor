@@ -144,6 +144,10 @@ public class PreviewPane extends Table {
 					} else if (widget.equals("TextField")) { // TextField
 
 						TextField w = new TextField("This is a TextField widget", game.skinProject, key);
+						if (w.getStyle().fontColor == null) {
+							throw new Exception("Textfield style requires a font color!");
+						}
+						
 						w.addListener(stopTouchDown);
 
 						add(w).pad(10).width(220).padBottom(20).row();

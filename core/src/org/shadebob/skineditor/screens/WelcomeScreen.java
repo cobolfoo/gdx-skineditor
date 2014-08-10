@@ -1,5 +1,6 @@
 package org.shadebob.skineditor.screens;
 
+import org.shadebob.skineditor.NinePatchEditorDialog;
 import org.shadebob.skineditor.SkinEditorGame;
 
 import com.badlogic.gdx.Gdx;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -138,6 +140,10 @@ public class WelcomeScreen implements Screen {
 		});
 
 		refreshProjects();
+		
+		
+//		NinePatchEditorDialog dlg = new NinePatchEditorDialog(game);
+//		dlg.show(stage);
 
 	}
 

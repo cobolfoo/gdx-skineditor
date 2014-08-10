@@ -76,17 +76,26 @@ public class DrawablePickerDialog extends Dialog {
 		scrollPane.setFadeScrollBars(false);
 		scrollPane.setScrollbarsOnTop(true);
 
-		TextButton buttonZoom = new TextButton("Toggle Zoom", game.skin);
-		buttonZoom.addListener(new ChangeListener() {
+		TextButton buttonNewNinePatch = new TextButton("Create NinePatch", game.skin);
+		buttonNewNinePatch.addListener(new ChangeListener() {
 
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				zoom = !zoom;
-				updateTable();
 
+				NinePatchEditorDialog dlg = new NinePatchEditorDialog(game) {
+					@Override
+					public void hide() {
+						super.hide();
+
+						updateTable();
+					}
+				};
+				
+				dlg.show(game.screenMain.stage);
 			}
 
 		});
+		
 		TextButton buttonNewDrawable = new TextButton("Import Image", game.skin);
 		buttonNewDrawable.addListener(new ChangeListener() {
 
@@ -162,6 +171,19 @@ public class DrawablePickerDialog extends Dialog {
 
 		});
 
+
+		TextButton buttonZoom = new TextButton("Toggle Zoom", game.skin);
+		buttonZoom.addListener(new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				zoom = !zoom;
+				updateTable();
+
+			}
+
+		});
+		
 		TextButton buttonNoDrawable = new TextButton("Empty Drawable", game.skin);
 
 		buttonNoDrawable.addListener(new ChangeListener() {
@@ -186,9 +208,12 @@ public class DrawablePickerDialog extends Dialog {
 		});
 
 		getContentTable().add(scrollPane).width(960).height(640).pad(20);
-		getButtonTable().add(buttonZoom);
+		getButtonTable().add(buttonNewNinePatch);
 		getButtonTable().add(buttonNewDrawable);
-		getButtonTable().add(buttonNoDrawable);
+		getButtonTable().add(buttonZoom);
+		if (field != null) {
+			getButtonTable().add(buttonNoDrawable);
+		}
 		getButtonTable().padBottom(15);
 		button("Cancel", false);
 		key(com.badlogic.gdx.Input.Keys.ESCAPE, false);
@@ -268,6 +293,11 @@ public class DrawablePickerDialog extends Dialog {
 
 				@Override
 				public void changed(ChangeEvent event, Actor actor) {
+					
+					if (field == null) {
+						return;
+					}
+					
 					try {
 						// Since we have reloaded everything we have to get
 						// field back

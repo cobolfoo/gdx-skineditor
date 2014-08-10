@@ -144,15 +144,17 @@ public class ColorPickerDialog extends Dialog {
 			}
 
 		});
-
+		
 		ScrollPane scrollPane = new ScrollPane(tableColors, game.skin);
 		scrollPane.setFlickScroll(false);
 		scrollPane.setFadeScrollBars(false);
 		scrollPane.setScrollbarsOnTop(true);
 
-		getContentTable().add(scrollPane).width(640).height(320).pad(20);
+		getContentTable().add(scrollPane).width(540).height(320).pad(20);
 		getButtonTable().add(buttonNewColor);
-		getButtonTable().add(buttonNoColor);
+		if (field != null) {
+			getButtonTable().add(buttonNoColor);
+		}
 		getButtonTable().padBottom(15);
 		button("Cancel", false);
 		key(com.badlogic.gdx.Input.Keys.ESCAPE, false);
@@ -253,7 +255,9 @@ public class ColorPickerDialog extends Dialog {
 
 			});
 
-			tableColors.add(buttonSelect).padRight(5);
+			if (field != null) {
+				tableColors.add(buttonSelect).padRight(5);
+			}
 			tableColors.add(buttonRemove);
 			tableColors.row();
 		}

@@ -99,7 +99,7 @@ public class FontPickerDialog extends Dialog {
 
 		tableFonts.clear();
 		tableFonts.add(new Label("Font Name", game.skin, "title")).left().width(170);
-		tableFonts.add(new Label("Value", game.skin, "title")).colspan(2).left().width(60).padRight(50).expandX().fillX();
+		tableFonts.add(new Label("Value", game.skin, "title")).colspan(3).left().width(60).padRight(50).expandX().fillX();
 
 		tableFonts.row();
 
@@ -114,7 +114,7 @@ public class FontPickerDialog extends Dialog {
 			labelStyle.font = font;
 			labelStyle.fontColor = Color.WHITE;
 
-			tableFonts.add(new Label("Sample Text", labelStyle));
+			tableFonts.add(new Label("Sample Text", labelStyle)).left();
 
 			TextButton buttonSelect = new TextButton("Select", game.skin);
 			buttonSelect.addListener(new ChangeListener() {
@@ -189,8 +189,10 @@ public class FontPickerDialog extends Dialog {
 
 			});
 
-			tableFonts.add(buttonSelect);
-			tableFonts.add(buttonRemove);
+			if (field != null) {
+				tableFonts.add(buttonSelect).left();
+			}
+			tableFonts.add(buttonRemove).left().expandX();
 			tableFonts.row();
 		}
 

@@ -20,6 +20,9 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 
+import org.shadebob.skineditor.ColorPickerDialog;
+import org.shadebob.skineditor.DrawablePickerDialog;
+import org.shadebob.skineditor.FontPickerDialog;
 import org.shadebob.skineditor.SkinEditorGame;
 
 import com.badlogic.gdx.Gdx;
@@ -57,6 +60,50 @@ public class MenuBar extends Table {
 		
 		left();
 		setBackground(game.skin.getDrawable("default-pane"));
+
+		TextButton buttonDrawables = new TextButton("Drawables", game.skin);
+		add(buttonDrawables).pad(5);
+		
+		buttonDrawables.addListener(new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+
+				DrawablePickerDialog dlg = new DrawablePickerDialog(game, null);
+				dlg.show(game.screenMain.stage);
+				
+			}
+			
+		});
+		add(buttonDrawables).pad(5);
+		
+		TextButton buttonFonts = new TextButton("Bitmap Fonts", game.skin);
+		buttonFonts.addListener(new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				
+				FontPickerDialog dlg = new FontPickerDialog(game, null);
+				dlg.show(game.screenMain.stage);
+			}
+			
+		});
+		add(buttonFonts).pad(5);
+		
+		TextButton buttonColors = new TextButton("Colors", game.skin);
+		buttonColors.addListener(new ChangeListener() {
+
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				
+				ColorPickerDialog dlg = new ColorPickerDialog(game, null);
+				dlg.show(game.screenMain.stage);
+				
+			}
+			
+		});
+		add(buttonColors).pad(5);
+		
 		
 		TextButton buttonRefresh = new TextButton("Refresh Resources", game.skin);
 		add(buttonRefresh).pad(5);
