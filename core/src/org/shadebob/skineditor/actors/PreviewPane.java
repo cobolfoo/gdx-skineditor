@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar.ProgressBarStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
@@ -175,7 +176,14 @@ public class PreviewPane extends Table {
 
 					} else if (widget.equals("ProgressBar")) { // ProgressBar
 
-						ProgressBar w = new ProgressBar(0, 100, 5, false, game.skinProject, key);
+						ProgressBarStyle progressStyle = game.skinProject.get(key, ProgressBarStyle.class);
+						
+						// Check for edge-case: fields knob and knobBefore are optional but at least one should be specified
+						if(progressStyle.knob == null && progressStyle.knobBefore == null) {
+							throw new IllegalArgumentException("Fields 'knob' and 'knobBefore' in ProgressBarStyle are both optional but at least one should be specified");
+						}
+						
+						ProgressBar w = new ProgressBar(0, 100, 5, false, progressStyle);
 						w.setValue(50);
 						w.addListener(stopTouchDown);
 
