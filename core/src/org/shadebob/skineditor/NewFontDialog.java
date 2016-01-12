@@ -188,12 +188,6 @@ public class NewFontDialog extends Dialog {
 
 		});
 		
-		textFontName.setTextFieldListener(new TextFieldListener() {
-			@Override public void keyTyped(TextField textField, char c) {
-				refreshFontPreview(textField.getText());
-			}
-		});
-		
 		refreshFontPreview();
 
 		getContentTable().add(table).width(520).height(320).pad(20);
@@ -211,9 +205,9 @@ public class NewFontDialog extends Dialog {
 					return;
 				}
 				
-				
-				FileHandle handleFont = new FileHandle(System.getProperty("java.io.tmpdir")).child(textFontName.getText() + ".fnt");
-				FileHandle handleImage = new FileHandle(System.getProperty("java.io.tmpdir")).child(textFontName.getText() + ".png");
+				String properFontName = generateProperFontName(selectFonts.getSelected());
+				FileHandle handleFont = new FileHandle(System.getProperty("java.io.tmpdir")).child(properFontName + ".fnt");
+				FileHandle handleImage = new FileHandle(System.getProperty("java.io.tmpdir")).child(properFontName + ".png");
 				
 				FileHandle targetFont = Gdx.files.local("projects/" + game.screenMain.getcurrentProject() + "/" + textFontName.getText() + ".fnt");
 				FileHandle targetImage = Gdx.files.local("projects/" + game.screenMain.getcurrentProject() + "/assets/" + textFontName.getText() + ".png");
@@ -261,10 +255,6 @@ public class NewFontDialog extends Dialog {
 	 * 
 	 */
 	public void refreshFontPreview() {
-		refreshFontPreview(null);
-	}
-	
-	public void refreshFontPreview(String newFontName) {
 
 		try {
 			String fontName = selectFonts.getSelected();
@@ -298,20 +288,9 @@ public class NewFontDialog extends Dialog {
 			
 			unicodeFont.addAsciiGlyphs();
 			
-			if(newFontName == null || newFontName.trim().equals("")) {
+			String newFontName = generateProperFontName(fontName);
 
-				// Generate a temporary name for your font (Do not end with a number, it will be removed in the atlas)
-				newFontName = "font_"+fontName.toLowerCase().replace(" ", "_") +"_"+selectSize.getSelected()+"pt";
-				if (checkBold.isChecked() == true) {
-					newFontName += "_bold";
-				}
-				
-				if (checkItalic.isChecked() == true) {
-					newFontName += "_italic";
-				}
-				
-				textFontName.setText(newFontName);
-			}
+			textFontName.setText(newFontName);
 			
 			// Create bitmap font
 			BMFontUtil bfu = new BMFontUtil(unicodeFont);
@@ -341,5 +320,19 @@ public class NewFontDialog extends Dialog {
 			// Have to do this to force clipping of font
 			textFontPreview.setText(textFontPreview.getText());
 		}
+	}
+	
+	private String generateProperFontName(String originalFontName) {
+		// Generate a temporary name for your font (Do not end with a number, it will be removed in the atlas)
+		String newFontName = "font_"+originalFontName.toLowerCase().replace(" ", "_") +"_"+selectSize.getSelected()+"pt";
+		if (checkBold.isChecked() == true) {
+			newFontName += "_bold";
+		}
+		
+		if (checkItalic.isChecked() == true) {
+			newFontName += "_italic";
+		}
+		
+		return newFontName;
 	}
 }
