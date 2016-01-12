@@ -32,6 +32,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.tools.hiero.BMFontUtil;
 import com.badlogic.gdx.tools.hiero.unicodefont.UnicodeFont;
@@ -187,6 +188,12 @@ public class NewFontDialog extends Dialog {
 
 		});
 		
+		textFontName.setTextFieldListener(new TextFieldListener() {
+			@Override public void keyTyped(TextField textField, char c) {
+				refreshFontPreview(textField.getText());
+			}
+		});
+		
 		refreshFontPreview();
 
 		getContentTable().add(table).width(520).height(320).pad(20);
@@ -254,6 +261,10 @@ public class NewFontDialog extends Dialog {
 	 * 
 	 */
 	public void refreshFontPreview() {
+		refreshFontPreview(null);
+	}
+	
+	public void refreshFontPreview(String newFontName) {
 
 		try {
 			String fontName = selectFonts.getSelected();
@@ -287,19 +298,20 @@ public class NewFontDialog extends Dialog {
 			
 			unicodeFont.addAsciiGlyphs();
 			
+			if(newFontName == null || newFontName.trim().equals("")) {
 
-			// Generate a temporary name for your font (Do not end with a number, it will be removed in the atlas)
-			String newFontName = "font_"+fontName.toLowerCase().replace(" ", "_") +"_"+selectSize.getSelected()+"pt";
-			if (checkBold.isChecked() == true) {
-				newFontName += "_bold";
+				// Generate a temporary name for your font (Do not end with a number, it will be removed in the atlas)
+				newFontName = "font_"+fontName.toLowerCase().replace(" ", "_") +"_"+selectSize.getSelected()+"pt";
+				if (checkBold.isChecked() == true) {
+					newFontName += "_bold";
+				}
+				
+				if (checkItalic.isChecked() == true) {
+					newFontName += "_italic";
+				}
+				
+				textFontName.setText(newFontName);
 			}
-			
-			if (checkItalic.isChecked() == true) {
-				newFontName += "_italic";
-			}
-			
-			textFontName.setText(newFontName);
-	
 			
 			// Create bitmap font
 			BMFontUtil bfu = new BMFontUtil(unicodeFont);
