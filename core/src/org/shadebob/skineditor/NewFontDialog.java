@@ -32,6 +32,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.tools.hiero.BMFontUtil;
 import com.badlogic.gdx.tools.hiero.unicodefont.UnicodeFont;
@@ -204,12 +205,12 @@ public class NewFontDialog extends Dialog {
 					return;
 				}
 				
+				String properFontName = generateProperFontName(selectFonts.getSelected());
+				FileHandle handleFont = new FileHandle(System.getProperty("java.io.tmpdir")).child(properFontName + ".fnt");
+				FileHandle handleImage = new FileHandle(System.getProperty("java.io.tmpdir")).child(properFontName + ".png");
 				
-				FileHandle handleFont = new FileHandle(System.getProperty("java.io.tmpdir")).child(textFontName.getText() + ".fnt");
-				FileHandle handleImage = new FileHandle(System.getProperty("java.io.tmpdir")).child(textFontName.getText() + ".png");
-				
-				FileHandle targetFont = new FileHandle("projects/" + game.screenMain.getcurrentProject() + "/" + textFontName.getText() + ".fnt");
-				FileHandle targetImage = new FileHandle("projects/" + game.screenMain.getcurrentProject() + "/assets/" + textFontName.getText() + ".png");
+				FileHandle targetFont = Gdx.files.local("projects/" + game.screenMain.getcurrentProject() + "/" + textFontName.getText() + ".fnt");
+				FileHandle targetImage = Gdx.files.local("projects/" + game.screenMain.getcurrentProject() + "/assets/" + textFontName.getText() + ".png");
 				
 				if ((targetFont.exists() == true) || (targetImage.exists() == true)) {
 					
@@ -287,19 +288,9 @@ public class NewFontDialog extends Dialog {
 			
 			unicodeFont.addAsciiGlyphs();
 			
+			String newFontName = generateProperFontName(fontName);
 
-			// Generate a temporary name for your font (Do not end with a number, it will be removed in the atlas)
-			String newFontName = "font_"+fontName.toLowerCase().replace(" ", "_") +"_"+selectSize.getSelected()+"pt";
-			if (checkBold.isChecked() == true) {
-				newFontName += "_bold";
-			}
-			
-			if (checkItalic.isChecked() == true) {
-				newFontName += "_italic";
-			}
-			
 			textFontName.setText(newFontName);
-	
 			
 			// Create bitmap font
 			BMFontUtil bfu = new BMFontUtil(unicodeFont);
@@ -329,5 +320,19 @@ public class NewFontDialog extends Dialog {
 			// Have to do this to force clipping of font
 			textFontPreview.setText(textFontPreview.getText());
 		}
+	}
+	
+	private String generateProperFontName(String originalFontName) {
+		// Generate a temporary name for your font (Do not end with a number, it will be removed in the atlas)
+		String newFontName = "font_"+originalFontName.toLowerCase().replace(" ", "_") +"_"+selectSize.getSelected()+"pt";
+		if (checkBold.isChecked() == true) {
+			newFontName += "_bold";
+		}
+		
+		if (checkItalic.isChecked() == true) {
+			newFontName += "_italic";
+		}
+		
+		return newFontName;
 	}
 }
