@@ -56,6 +56,7 @@ public class SystemFonts {
 			
 			fontPaths.add("/Network/Library/Fonts/");
 			fontPaths.add("~/Library/Fonts/");
+			fontPaths.add("/Library/Fonts/");
 		}
 		
 	}
