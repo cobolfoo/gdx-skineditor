@@ -15,13 +15,11 @@
  ******************************************************************************/
 package org.shadebob.skineditor;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.TreeSet;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+
+import java.io.File;
+import java.util.HashMap;
 
 /**
  * Ok here's the deal.
@@ -56,6 +54,7 @@ public class SystemFonts {
 			
 			fontPaths.add("/Network/Library/Fonts/");
 			fontPaths.add("~/Library/Fonts/");
+			fontPaths.add("/Library/Fonts/");
 		}
 		
 	}
