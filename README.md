@@ -1,3 +1,6 @@
+Project not maintained anymore, please use Skin Composer:
+https://ray3k.wordpress.com/software/skin-composer-for-libgdx/
+
 gdx-skineditor
 ==============
 
